@@ -110,7 +110,11 @@ public class MainApp extends Application {
 			AnchorPane albumEdit = (AnchorPane)loader.load();
 			
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Edit album");
+			if ( album.getAlbumId() == null) {
+				dialogStage.setTitle("New album");
+			} else {
+				dialogStage.setTitle("Edit album");
+			}
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.initOwner(primaryStage);
 			Scene scene = new Scene(albumEdit);
@@ -136,7 +140,11 @@ public class MainApp extends Application {
 			AnchorPane releaseEdit = (AnchorPane)loader.load();
 			
 			Stage dialogStage = new Stage();
-			dialogStage.setTitle("Edit release");
+			if ( release.getReleaseId() == null ) {
+				dialogStage.setTitle("New release");
+			} else {
+				dialogStage.setTitle("Edit release");
+			}
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.initOwner(primaryStage);
 			Scene scene = new Scene(releaseEdit);

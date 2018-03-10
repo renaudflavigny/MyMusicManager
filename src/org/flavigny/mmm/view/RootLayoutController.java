@@ -57,10 +57,8 @@ public class RootLayoutController {
 			try {
 				DataBase db=new DataBase(file);
 				mainApp.setDataBase(db);
-				ArrayList<Album> albumList = db.fetchAlbums();
-				for ( Album a : albumList) {
-					mainApp.getAlbumList().add(a);
-				}
+				mainApp.getAlbumList().addAll(db.fetchAlbums());
+				mainApp.getReleaseList().addAll(db.fetchReleases());
 				mainApp.getPrimaryStage().setTitle(mainApp.getPrimaryStage().getTitle()+" - "+file);
 			} catch ( DataBaseException e) {
 				Alert alert = new Alert(AlertType.ERROR);

@@ -65,7 +65,8 @@ public class ReleaseOverviewController {
 		albumTitleColumn.setCellValueFactory(
 				cellData -> cellData.getValue().titleProperty());
 		showReleaseDetails(null);
-		
+		releaseTable.getSelectionModel().selectedItemProperty().addListener(
+				(observable,oldValue,newValue)->showReleaseDetails(newValue));
 	}
 	
 	private void showReleaseDetails( Release release) {

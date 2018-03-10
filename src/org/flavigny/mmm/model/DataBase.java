@@ -170,6 +170,7 @@ public class DataBase {
 				Release r = new Release(rs.getString("artist"),rs.getString("title"));
 				r.setReleaseId(rs.getInt("releaseId"));
 				r.setYear(rs.getInt("year"));
+				r.setBarcode(rs.getString("barcode"));
 				r.setStatus(rs.getString("status"));
 				r.setPackaging(rs.getString("packaging"));
 				r.setFormat(rs.getString("format"));
@@ -180,6 +181,34 @@ public class DataBase {
 			stmt.close();
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName()+" : "+e.getMessage());
+		}
+		return releaseList;
+	}
+	
+	public ArrayList<Release> fetchReleases(Album album){
+		ArrayList<Release> releaseList = new ArrayList<>();
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(
+					"SELECT * FROM releases JOIN ( SELECT releaseId FROM relAlbumRelease WHERE albumId = ? ) USING ( releaseId ) ORDER BY artist,title ASC");
+			pstmt.setInt(1, album.getAlbumId());
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Release r = new Release(rs.getString("artist"),rs.getString("title"));
+				r.setReleaseId(rs.getInt("releaseId"));
+				r.setYear(rs.getInt("year"));
+				r.setBarcode(rs.getString("barcode"));
+				r.setStatus(rs.getString("status"));
+				r.setPackaging(rs.getString("packaging"));
+				r.setFormat(rs.getString("format"));
+				r.setComment(rs.getString("comment"));
+				releaseList.add(r);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return releaseList;
 	}
@@ -202,6 +231,8 @@ public class DataBase {
 			ResultSet rs = pstmt.getGeneratedKeys();
 			rs.next();
 			release.setReleaseId(rs.getInt(1));
+			rs.close();
+			pstmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -215,7 +246,8 @@ public class DataBase {
 			pstmt.setInt(1, t.getId());
 			pstmt.setString(2, t.getName());
 			pstmt.setString(3, t.getValue());
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
+			pstmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -228,5 +260,20 @@ public class DataBase {
 	
 	public void insertReleaseTag(Tag t) {
 		insertTag("releases",t);
+	}
+	
+	public void insertRelAlbumRelease(Album album, Release release) {
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(
+					"INSERT INTO relAlbumRelease (albumId,releaseId) VALUES (?,?)");
+			pstmt.setInt(1, album.getAlbumId());
+			pstmt.setInt(2, release.getReleaseId());
+			pstmt.executeUpdate();
+			pstmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

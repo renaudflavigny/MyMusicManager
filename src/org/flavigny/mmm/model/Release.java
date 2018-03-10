@@ -7,7 +7,7 @@ import javafx.beans.property.StringProperty;
 
 public class Release {
 
-	private final IntegerProperty releaseId;
+	private Integer releaseId;
 	private final StringProperty artist;
 	private final StringProperty title;
 	private final IntegerProperty year;
@@ -18,7 +18,6 @@ public class Release {
 	private final StringProperty comment;
 	
 	public Release(String artist, String title) {
-		this.releaseId = new SimpleIntegerProperty();
 		this.artist = new SimpleStringProperty(artist);
 		this.title = new SimpleStringProperty(title);
 		this.year = new SimpleIntegerProperty();
@@ -151,25 +150,12 @@ public class Release {
 		this.formatProperty().set(format);
 	}
 
-
-	public IntegerProperty releaseIdProperty() {
+	public Integer getReleaseId() {
 		return this.releaseId;
 	}
 	
-
-
-	public int getReleaseId() {
-		return this.releaseIdProperty().get();
+	public void setReleaseId(Integer releaseId) {
+		this.releaseId=releaseId;
 	}
-	
-
-
-	public void setReleaseId(final int releaseId) {
-		this.releaseIdProperty().set(releaseId);
-	}
-	
-	
-	
-	
 
 }
