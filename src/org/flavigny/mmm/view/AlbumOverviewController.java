@@ -2,7 +2,11 @@ package org.flavigny.mmm.view;
 
 import org.flavigny.mmm.MainApp;
 import org.flavigny.mmm.model.Album;
+import org.flavigny.mmm.model.Release;
+import org.flavigny.mmm.model.Tag;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -24,6 +28,18 @@ public class AlbumOverviewController {
 	@FXML private Label secondaryTypeLabel;
 	@FXML private Label commentLabel;
 	
+	private ObservableList<Release> relatedReleaseList = FXCollections.observableArrayList();
+	
+	@FXML private TableView<Release> releaseTable;
+	@FXML private TableColumn<Release, String> releaseArtistColumn;
+	@FXML private TableColumn<Release, String> releaseTitleColumn;
+	
+	private ObservableList<Tag> tagList = FXCollections.observableArrayList();
+	
+	@FXML private TableView<Tag> tagsTable;
+	@FXML private TableColumn<Tag, String> tagNameColumn;
+	@FXML private TableColumn<Tag, String> tagValueColumn;
+	
 	private MainApp mainApp;
 	
 	@FXML private void initialize() {
@@ -31,6 +47,11 @@ public class AlbumOverviewController {
 				cellData -> cellData.getValue().artistProperty());
 		titleColumn.setCellValueFactory(
 				cellData -> cellData.getValue().titleProperty());
+		releaseTable.setItems(relatedReleaseList);
+		releaseArtistColumn.setCellValueFactory(
+				cellData->cellData.getValue().artistProperty());
+		releaseTitleColumn.setCellValueFactory(
+				cellData->cellData.getValue().titleProperty());
 		
 		showAlbumDetails(null);
 		albumTable.getSelectionModel().selectedItemProperty().addListener(
@@ -51,6 +72,8 @@ public class AlbumOverviewController {
 			primaryTypeLabel.setText(album.getPrimaryType());
 			secondaryTypeLabel.setText(album.getSecondaryType());
 			commentLabel.setText(album.getComment());
+			relatedReleaseList.clear();
+			relatedReleaseList.addAll(mainApp.getDataBase().fetchReleases(album));
 		} else {
 			albumIdLabel.setText("");
 			artistLabel.setText("");
@@ -59,7 +82,20 @@ public class AlbumOverviewController {
 			primaryTypeLabel.setText("");
 			secondaryTypeLabel.setText("");
 			commentLabel.setText("");
+			relatedReleaseList.clear();
 		}
+	}
+	
+	@FXML private void handleAddRelRelease() {
+		Album album = albumTable.getSelectionModel().getSelectedItem();
+		Release release = new Release();
+		if ( album != null ) {
+			boolean okClicked = mainApp.showAddRelRelease(album, release);
+			if ( okClicked ) {
+				relatedReleaseList.add(release);
+				mainApp.getDataBase().insertRelAlbumRelease(album, release);
+			}
+		} 
 	}
 	
 	@FXML

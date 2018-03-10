@@ -157,5 +157,17 @@ public class Release {
 	public void setReleaseId(Integer releaseId) {
 		this.releaseId=releaseId;
 	}
+	
+	public void copy( Release r) {
+		setArtist(r.getArtist());
+		setBarcode(r.getBarcode());
+		setComment(r.getComment());
+		setFormat(r.getFormat());
+		setPackaging(r.getPackaging());
+		setReleaseId(r.getReleaseId());
+		setStatus(r.getStatus());
+		setTitle(r.getTitle());
+		setYear(r.getYear());
+	}
 
 }
