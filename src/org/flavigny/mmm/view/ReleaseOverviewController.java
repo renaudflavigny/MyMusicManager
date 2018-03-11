@@ -119,6 +119,16 @@ public class ReleaseOverviewController {
 		if ( okClicked ) {
 			mainApplication.getDataBase().insertRelease(release);
 			mainApplication.getReleaseList().add(release);
+			showReleaseDetails(release);
+		}
+	}
+	
+	@FXML private void handleEditRelease() {
+		Release release = releaseTable.getSelectionModel().getSelectedItem();
+		boolean okClicked = mainApplication.showReleaseEditDialog(release);
+		if ( okClicked ) {
+			mainApplication.getDataBase().replaceRelease(release);
+			showReleaseDetails(release);
 		}
 	}
 	

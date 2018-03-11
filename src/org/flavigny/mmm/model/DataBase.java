@@ -261,6 +261,27 @@ public class DataBase {
 		}
 	}
 	
+	public void replaceRelease( Release release ) {
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(
+					"REPLACE INTO releases (releaseId, artist, title, year, barcode, status, packaging, format, comment) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?)");
+			pstmt.setInt(1, release.getReleaseId());
+			pstmt.setString(2, release.getArtist());
+			pstmt.setString(3, release.getTitle());
+			pstmt.setInt(4, release.getYear());
+			pstmt.setString(5, release.getBarcode());
+			pstmt.setString(6, release.getStatus());
+			pstmt.setString(7, release.getPackaging());
+			pstmt.setString(8, release.getFormat());
+			pstmt.setString(9, release.getComment());
+			pstmt.executeUpdate();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void insertTag(String table, Tag t) {
 		String query = String.format("INSERT INTO %s (id,name,value) VALUES (?,?,?)", table );
 		try {

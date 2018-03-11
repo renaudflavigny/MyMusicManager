@@ -93,6 +93,20 @@ public class ReleaseEditController {
 
 	public void setRelease(Release release) {
 		this.release = release;
+		artistField.setText(release.getArtist());
+		if ( release.getArtist().equalsIgnoreCase("Various artists") ) {
+			artistField.setDisable(true);
+			variousCheckbox.setSelected(true);
+		} else {
+			variousCheckbox.setSelected(false);
+		}
+		titleField.setText(release.getTitle());
+		yearField.setText(Integer.toString(release.getYear()));
+		statusCombo.getSelectionModel().select(release.getStatus());
+		packagingCombo.getSelectionModel().select(release.getPackaging());
+		formatCombo.getSelectionModel().select(release.getFormat());
+		commentField.setText(release.getComment());
+		barcodeField.setText(release.getBarcode());
 	}
 
 	public ReleaseEditController() {
