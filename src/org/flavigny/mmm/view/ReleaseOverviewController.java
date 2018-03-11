@@ -101,6 +101,18 @@ public class ReleaseOverviewController {
 		releaseTable.setItems(mainApp.getReleaseList());
 	}
 	
+	@FXML private void handleAddRelAlbum() {
+		Album album = new Album();
+		Release release = releaseTable.getSelectionModel().getSelectedItem();
+		if ( release != null ) {
+			boolean okClicked = mainApplication.showAddRelAlbum(album, release);
+			if ( okClicked ) {
+				relatedAlbumList.add(album);
+				mainApplication.getDataBase().insertRelAlbumRelease(album, release);
+			}
+		}
+	}
+	
 	@FXML private void handleNewRelease() {
 		Release release = new Release();
 		boolean okClicked = mainApplication.showReleaseEditDialog(release);

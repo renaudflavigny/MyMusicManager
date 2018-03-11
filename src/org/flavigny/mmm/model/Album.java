@@ -124,6 +124,14 @@ public class Album {
 		this.commentProperty().set(comment);
 	}
 	
-	
+	public void copy( Album a) {
+		this.setAlbumId(a.getAlbumId());
+		this.setArtist(a.getArtist());
+		this.setComment(a.getComment());
+		this.setPrimaryType(a.getPrimaryType());
+		this.setSecondaryType(a.getSecondaryType());
+		this.setTitle(a.getTitle());
+		this.setYear(a.getYear());
+	}
 	
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.flavigny.mmm.model.Album;
 import org.flavigny.mmm.model.DataBase;
 import org.flavigny.mmm.model.Release;
+import org.flavigny.mmm.view.AddRelAlbumController;
 import org.flavigny.mmm.view.AddRelReleaseController;
 import org.flavigny.mmm.view.AlbumEditController;
 import org.flavigny.mmm.view.MainTabsController;
@@ -152,6 +153,34 @@ public class MainApp extends Application {
 			controller.setAlbum(album);
 			controller.setRelease(release);
 			controller.setReleaseList(releaseList);
+			
+			dialogStage.showAndWait();
+			return controller.isOkClicked();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean showAddRelAlbum(Album album, Release release) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/AddRelAlbum.fxml"));
+			AnchorPane addRelRelease = (AnchorPane)loader.load();
+			
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Add Related Release");
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.initOwner(primaryStage);
+			Scene scene = new Scene(addRelRelease);
+			dialogStage.setScene(scene);
+			
+			AddRelAlbumController controller = loader.getController();
+			controller.setDialogStage(dialogStage);
+			controller.setAlbum(album);
+			controller.setRelease(release);
+			controller.setAlbumList(albumList);
 			
 			dialogStage.showAndWait();
 			return controller.isOkClicked();
