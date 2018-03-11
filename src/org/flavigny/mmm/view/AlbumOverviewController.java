@@ -130,6 +130,7 @@ public class AlbumOverviewController {
 		 		boolean okClicked = mainApp.showAlbumEditDialog(album);
 		 		if (okClicked) {
 		 			showAlbumDetails(album);
+		 			mainApp.getDataBase().replaceAlbum(album);
 		 		}
 		 	} else {
 		 		Alert alert = new Alert(AlertType.WARNING);

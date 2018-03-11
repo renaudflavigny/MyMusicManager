@@ -155,6 +155,28 @@ public class DataBase {
 			ResultSet rs = pstmt.getGeneratedKeys();
 			rs.next();
 			album.setAlbumId(rs.getInt(1));
+			
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			System.err.println(e.getClass().getName()+" : "+e.getMessage());
+		}
+	}
+	
+	public void replaceAlbum( Album album ) {
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(
+					"REPLACE INTO albums (albumId, artist, title, year, primaryType, secondaryType, comment) "
+					+ "VALUES (?,?,?,?,?,?,?)" );
+			pstmt.setInt(1,album.getAlbumId());
+			pstmt.setString(2, album.getArtist());
+			pstmt.setString(3, album.getTitle());
+			pstmt.setInt(4, album.getYear());
+			pstmt.setString(5, album.getPrimaryType());
+			pstmt.setString(6, album.getSecondaryType());
+			pstmt.setString(7, album.getComment());
+			pstmt.executeUpdate();
+			pstmt.close();
 		} catch (SQLException e) {
 			System.err.println(e.getClass().getName()+" : "+e.getMessage());
 		}
