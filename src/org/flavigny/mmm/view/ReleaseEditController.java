@@ -1,6 +1,7 @@
 package org.flavigny.mmm.view;
 
 import org.flavigny.mmm.model.Release;
+import org.flavigny.mmm.model.MusicBrainz;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,10 +36,12 @@ public class ReleaseEditController {
 	
 	private ChangeListener<String> changeListener = new ChangeListener<String>() {
 		@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-			if ( artistField.getText().length() == 0 || titleField.getText().length() == 0) {
-				okButton.setDisable(true);
-			} else {
-				okButton.setDisable(false);
+			if (artistField.getText() != null && titleField.getText() != null ) {
+				if (artistField.getText().length() == 0 || titleField.getText().length() == 0) {
+					okButton.setDisable(true);
+				} else {
+					okButton.setDisable(false);
+				} 
 			}
 		}
 	};
@@ -94,11 +97,14 @@ public class ReleaseEditController {
 	public void setRelease(Release release) {
 		this.release = release;
 		artistField.setText(release.getArtist());
-		if ( release.getArtist().equalsIgnoreCase("Various artists") ) {
-			artistField.setDisable(true);
-			variousCheckbox.setSelected(true);
-		} else {
-			variousCheckbox.setSelected(false);
+		
+		if (release.getArtist() != null) {
+			if (release.getArtist().equalsIgnoreCase("Various artists")) {
+				artistField.setDisable(true);
+				variousCheckbox.setSelected(true);
+			} else {
+				variousCheckbox.setSelected(false);
+			} 
 		}
 		titleField.setText(release.getTitle());
 		yearField.setText(Integer.toString(release.getYear()));
@@ -139,5 +145,11 @@ public class ReleaseEditController {
 		
 		okClicked = true;
 		dialogStage.close();
+	}
+	
+	@FXML private void handleMusicBrainz() {
+		MusicBrainz mb = new MusicBrainz();
+		mb.addField("barcode", "724382962625");
+		mb.search();
 	}
 }

@@ -53,6 +53,7 @@
         <buttons>
           <Button fx:id="okButton" disable="true" mnemonicParsing="false" onAction="#handleOk" text="Ok" />
             <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+            <Button mnemonicParsing="false" onAction="#handleMusicBrainz" text="MusicBrainz" />
         </buttons>
       </ButtonBar>
    </children>
