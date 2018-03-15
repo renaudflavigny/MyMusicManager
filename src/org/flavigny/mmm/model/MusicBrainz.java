@@ -3,6 +3,7 @@ package org.flavigny.mmm.model;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -11,13 +12,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import javax.net.ssl.HttpsURLConnection;
-
 public class MusicBrainz {
 
 	private final String baseURL = "http://musicbrainz.org/ws/2/";
 	private String charset = StandardCharsets.UTF_8.name();
-	private String service;
+	private String ressource;
 	private String query;
 	private Integer limit = 25;
 	private Integer offset = 0;
@@ -42,7 +41,7 @@ public class MusicBrainz {
 	}
 
 	public int search() {
-		query = "?";
+		query = "?query=";
 		for ( String k : fields.keySet() ) {
 			try {
 				query += String.format("%s:%s&", URLEncoder.encode(k,charset), URLEncoder.encode(fields.get(k),charset));
@@ -54,18 +53,18 @@ public class MusicBrainz {
 		// Suppression du & final
 		query = query.substring(0, query.length()-1);
 		
-		service = "release/";
+		ressource = "release/";
 		URLConnection connection;
 		InputStream response;
 		try {
-			connection = new URL(baseURL+service+query).openConnection();
+			connection = new URL(baseURL+ressource+query+"&fmt=xml").openConnection();
 			connection.setRequestProperty("Accept-Charset", charset);
 			response = connection.getInputStream();
 		try (Scanner s = new Scanner(response)) {
 			responseString = s.useDelimiter("\\A").next();
 			System.out.println(responseString);
 		}
-			return ((HttpsURLConnection)connection).getResponseCode();
+			return ((HttpURLConnection)connection).getResponseCode();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
