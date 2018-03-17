@@ -80,9 +80,9 @@
                         </GridPane>
                         <ButtonBar prefHeight="40.0" prefWidth="200.0">
                           <buttons>
-                              <Button mnemonicParsing="false" onAction="#handleNewAlbum" text="New..." />
-                              <Button mnemonicParsing="false" onAction="#handleEditAlbum" text="Edit..." />
-                            <Button mnemonicParsing="false" onAction="#handleDeleteAlbum" text="Delete" />
+                              <Button fx:id="newButton" disable="true" mnemonicParsing="false" onAction="#handleNewAlbum" text="New..." />
+                              <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#handleEditAlbum" text="Edit..." />
+                            <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#handleDeleteAlbum" text="Delete" />
                           </buttons>
                         </ButtonBar>
                         <Label text="Related releases">

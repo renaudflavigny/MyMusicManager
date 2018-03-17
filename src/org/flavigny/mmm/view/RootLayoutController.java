@@ -26,15 +26,15 @@ public class RootLayoutController {
 		// TODO Auto-generated constructor stub
 	}
 
-	@FXML
-	private void handleNew() {
+	@FXML private void handleNew() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("New database");
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		File file=fileChooser.showSaveDialog(mainApp.getPrimaryStage());
 		if (file!=null) {
 			try {
-				DataBase db=new DataBase(file);
+				DataBase db = mainApp.getDataBase();
+				db.openDB(file);
 				db.populateDB();
 				mainApp.setDataBase(db);
 				mainApp.getPrimaryStage().setTitle(mainApp.getPrimaryStage().getTitle()+" - "+file);
@@ -47,16 +47,16 @@ public class RootLayoutController {
 			}
 		}
 	}
-	@FXML
-	private void handleOpen() {
+	
+	@FXML private void handleOpen() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open database");
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		File file=fileChooser.showOpenDialog(mainApp.getPrimaryStage());
 		if (file!=null) {
 			try {
-				DataBase db=new DataBase(file);
-				mainApp.setDataBase(db);
+				DataBase db=mainApp.getDataBase();
+				db.openDB(file);
 				mainApp.getAlbumList().addAll(db.fetchAlbums());
 				mainApp.getReleaseList().addAll(db.fetchReleases());
 				mainApp.getPrimaryStage().setTitle(mainApp.getPrimaryStage().getTitle()+" - "+file);
@@ -69,16 +69,16 @@ public class RootLayoutController {
 			}
 		}
 	}
-	@FXML
-	private void handleClose() {
+	
+	@FXML private void handleClose() {
 		try {
 			mainApp.getDataBase().closeDB();
 		} catch (DataBaseException e) {
 			System.err.println(e.getClass().getName()+" : "+e.getMessage());
 		}
 	}
-	@FXML
-	private void handleQuit() {
+	
+	@FXML private void handleQuit() {
 		Platform.exit();
 	}
 }

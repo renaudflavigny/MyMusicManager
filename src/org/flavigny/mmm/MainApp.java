@@ -27,7 +27,7 @@ public class MainApp extends Application {
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 
-	private DataBase dataBase;
+	private DataBase dataBase = new DataBase();
 	
 	public Stage getPrimaryStage() {
 		return primaryStage;

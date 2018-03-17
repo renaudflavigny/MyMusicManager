@@ -9,9 +9,11 @@ import org.flavigny.mmm.MainApp;
 import org.flavigny.mmm.model.Album;
 import org.flavigny.mmm.model.Release;
 
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -39,6 +41,8 @@ public class ReleaseOverviewController {
 	@FXML private Label barcodeLabel;
 	@FXML private Label commentLabel;
 	@FXML private Label formatLabel;
+	
+	@FXML private Button newButton;
 	
 	private ObservableList<Album> relatedAlbumList = FXCollections.observableArrayList();
 	
@@ -99,6 +103,14 @@ public class ReleaseOverviewController {
 	public void setMainApplication(MainApp mainApp) {
 		this.mainApplication = mainApp;
 		releaseTable.setItems(mainApp.getReleaseList());
+		// Gestion du bouton New en fonction de l'état de la base de donnée
+		mainApp.getDataBase().validProperty().addListener((Observable o) -> {
+			if ( mainApp.getDataBase().isValid() ) {
+				newButton.setDisable(false);
+			} else {
+				newButton.setDisable(true);
+			}
+		});
 	}
 	
 	@FXML private void handleAddRelAlbum() {

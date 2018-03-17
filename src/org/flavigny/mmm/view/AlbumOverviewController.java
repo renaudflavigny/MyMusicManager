@@ -2,14 +2,17 @@ package org.flavigny.mmm.view;
 
 import org.flavigny.mmm.MainApp;
 import org.flavigny.mmm.model.Album;
+import org.flavigny.mmm.model.DataBase;
 import org.flavigny.mmm.model.Release;
 import org.flavigny.mmm.model.Tag;
 
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -27,6 +30,10 @@ public class AlbumOverviewController {
 	@FXML private Label primaryTypeLabel;
 	@FXML private Label secondaryTypeLabel;
 	@FXML private Label commentLabel;
+	
+	@FXML private Button newButton;
+	@FXML private Button editButton;
+	@FXML private Button deleteButton;
 	
 	private ObservableList<Release> relatedReleaseList = FXCollections.observableArrayList();
 	
@@ -61,6 +68,14 @@ public class AlbumOverviewController {
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp=mainApp;
 		albumTable.setItems(mainApp.getAlbumList());
+		// Gestion du bouton New en fonction de l'état de la base de donnée
+		mainApp.getDataBase().validProperty().addListener((Observable o) -> {
+			if ( mainApp.getDataBase().isValid() ) {
+				newButton.setDisable(false);
+			} else {
+				newButton.setDisable(true);
+			}
+		});
 	}
 
 	private void showAlbumDetails(Album album) {

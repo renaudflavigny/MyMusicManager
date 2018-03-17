@@ -8,20 +8,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Observable;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class DataBase {
 	
 	private File file=null;
 	private Connection connection=null;
-
+	private final BooleanProperty valid = new SimpleBooleanProperty(false);
+	
 	public  DataBase() {
 		// Used for new function
 	}
-	
-	public DataBase(File dataBaseFile) throws DataBaseException {
-		this.openDB(dataBaseFile);
-	}
-	
 	
 	public void populateDB() throws DataBaseException {
 		String sqlInstructions = "CREATE TABLE albums ("
@@ -38,8 +38,8 @@ public class DataBase {
 				+ "artist TEXT,"
 				+ "title TEXT,"
 				+ "year NUMERIC,"
-				+ "barcode TEXT"
-				+ "status TEXT"
+				+ "barcode TEXT,"
+				+ "status TEXT,"
 				+ "packaging TEXT,"
 				+ "format TEXT,"
 				+ "comment TEXT)"
@@ -74,6 +74,7 @@ public class DataBase {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			this.connection = DriverManager.getConnection("jdbc:sqlite:"+file);
+			this.setValid(true);
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName()+" : "+e.getMessage());
 			throw new DataBaseException(e.getClass().getName()+" : "+e.getMessage());
@@ -85,6 +86,7 @@ public class DataBase {
 			connection.close();
 			connection=null;
 			file=null;
+			this.setValid(false);
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName()+" : "+e.getMessage());
 			throw new DataBaseException(e.getClass().getName()+" : "+e.getMessage());
@@ -319,4 +321,19 @@ public class DataBase {
 		}
 		
 	}
+
+	public BooleanProperty validProperty() {
+		return this.valid;
+	}
+	
+
+	public boolean isValid() {
+		return this.validProperty().get();
+	}
+	
+
+	public void setValid(final boolean valid) {
+		this.validProperty().set(valid);
+	}
+	
 }
