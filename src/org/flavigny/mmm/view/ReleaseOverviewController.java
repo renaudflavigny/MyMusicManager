@@ -43,6 +43,14 @@ public class ReleaseOverviewController {
 	@FXML private Label formatLabel;
 	
 	@FXML private Button newButton;
+	@FXML private Button editButton;
+	@FXML private Button deleteButton;
+	
+	@FXML private Button addRelatedAlbumButton;
+	@FXML private Button delRelatedAlbumButton;
+	
+	@FXML private Button addTagButton;
+	@FXML private Button delTagButton;
 	
 	private ObservableList<Album> relatedAlbumList = FXCollections.observableArrayList();
 	
@@ -71,6 +79,29 @@ public class ReleaseOverviewController {
 		showReleaseDetails(null);
 		releaseTable.getSelectionModel().selectedItemProperty().addListener(
 				(observable,oldValue,newValue)->showReleaseDetails(newValue));
+		releaseTable.getSelectionModel().selectedItemProperty().addListener(
+				(observable,oldvalue,newvalue) -> {
+					if ( releaseTable.getSelectionModel().isEmpty() ) {
+						editButton.setDisable(true);
+						deleteButton.setDisable(true);
+						addRelatedAlbumButton.setDisable(true);
+						addTagButton.setDisable(true);
+					} else {
+						editButton.setDisable(false);
+						deleteButton.setDisable(false);
+						addRelatedAlbumButton.setDisable(false);
+						addTagButton.setDisable(false);
+					}
+				});
+		albumsTable.getSelectionModel().selectedItemProperty().addListener(
+				(observable,oldvalue,newvalue) -> {
+					if ( albumsTable.getSelectionModel().isEmpty() ) {
+						delRelatedAlbumButton.setDisable(true);
+					} else {
+						delRelatedAlbumButton.setDisable(false);
+					}
+				});
+		
 	}
 	
 	private void showReleaseDetails( Release release) {

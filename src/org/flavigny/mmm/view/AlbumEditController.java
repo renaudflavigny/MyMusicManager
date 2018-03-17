@@ -112,6 +112,5 @@ public class AlbumEditController {
 	}
 	
 	public AlbumEditController() {
-		// TODO Auto-generated constructor stub
 	}
 }

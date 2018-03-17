@@ -87,8 +87,8 @@
                         <ButtonBar prefHeight="40.0" prefWidth="200.0">
                           <buttons>
                             <Button fx:id="newButton" disable="true" mnemonicParsing="false" onAction="#handleNewRelease" text="New..." />
-                              <Button mnemonicParsing="false" onAction="#handleEditRelease" text="Edit..." />
-                              <Button mnemonicParsing="false" text="Delete" />
+                              <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#handleEditRelease" text="Edit..." />
+                              <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" text="Delete" />
                           </buttons>
                         </ButtonBar>
                         <Label text="Related albums">
@@ -112,12 +112,12 @@
                               </TableView>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#handleAddRelAlbum" text="Add album">
+                                    <Button fx:id="addRelatedAlbumButton" disable="true" mnemonicParsing="false" onAction="#handleAddRelAlbum" text="Add album">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" text="Delete album">
+                                    <Button fx:id="delRelatedAlbumButton" disable="true" mnemonicParsing="false" text="Delete album">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
@@ -147,12 +147,12 @@
                               </TableView>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Add tag">
+                                    <Button fx:id="addTagButton" disable="true" mnemonicParsing="false" text="Add tag">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" text="Delete tag">
+                                    <Button fx:id="delTagButton" disable="true" mnemonicParsing="false" text="Delete tag">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
