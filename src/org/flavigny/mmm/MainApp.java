@@ -7,6 +7,7 @@ import org.flavigny.mmm.model.DataBase;
 import org.flavigny.mmm.model.Release;
 import org.flavigny.mmm.view.AddRelAlbumController;
 import org.flavigny.mmm.view.AddRelReleaseController;
+import org.flavigny.mmm.view.AddTagController;
 import org.flavigny.mmm.view.AlbumEditController;
 import org.flavigny.mmm.view.MainTabsController;
 import org.flavigny.mmm.view.ReleaseEditController;
@@ -157,7 +158,6 @@ public class MainApp extends Application {
 			dialogStage.showAndWait();
 			return controller.isOkClicked();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -185,12 +185,37 @@ public class MainApp extends Application {
 			dialogStage.showAndWait();
 			return controller.isOkClicked();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
 	}
 	
+	public boolean showAddTagDialog( Object o ) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(MainApp.class.getResource("view/AddTagDialog.fxml"));
+			AnchorPane addTagDialog = (AnchorPane)loader.load();
+			
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Add Tag");
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.initOwner(primaryStage);
+			Scene scene = new Scene(addTagDialog);
+			dialogStage.setScene(scene);
+			
+			AddTagController controller = loader.getController();
+			controller.setMainApplication(this);
+			controller.setDialogStage(dialogStage);
+			controller.setAlbumOrRelease( o );
+			
+			dialogStage.showAndWait();
+			return controller.isOkClicked();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
 	public boolean showReleaseEditDialog(Release release) {
 		try {
 			FXMLLoader loader = new FXMLLoader();

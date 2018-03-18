@@ -48,15 +48,11 @@ public class DataBase {
 				+ "albumId INTEGER,"
 				+ "releaseId INTEGER)"
 				+ ";"
-				+ "CREATE TABLE albumTags ("
-				+ "albumId INTEGER,"
-				+ "name TEXT,"
-				+ "value TEXT)"
-				+ ";"
-				+ "CREATE TABLE releaseTags ("
-				+ "releaseId INTEGER,"
-				+ "name TEXT,"
-				+ "value TEXT)"
+				+ "CREATE TABLE tags ("
+				+ "objectId INTEGER,"
+				+ "objectClass TEXT,"
+				+ "tagName TEXT,"
+				+ "tagValue TEXT )"
 				+ ";";
 		try {
 			Statement s = connection.createStatement();
@@ -236,6 +232,78 @@ public class DataBase {
 		return releaseList;
 	}
 	
+	private ArrayList<Tag> fetchTags( String  objectClass) {
+		String query = "SELECT tagName,tagValue FROM tags WHERE objectClass = ? ORDER BY tagName,tagValue ASC";
+		ArrayList<Tag> tagslist = new ArrayList<>();
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(query);
+			pstmt.setString(1, objectClass);
+			ResultSet rs = pstmt.executeQuery();
+			while ( rs.next() ) {
+				Tag t = new Tag();
+				t.setId(rs.getInt(1));
+				t.setName(rs.getString("tagName"));
+				t.setValue(rs.getString("tagValue"));
+				tagslist.add(t);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tagslist;
+	}
+	
+	public ArrayList<Tag> fetchAlbumTags() {
+		return fetchTags(Album.class.getName());
+	}
+	
+	public ArrayList<Tag> fetchReleaseTags() {
+		return fetchTags(Release.class.getName());
+	}
+	
+	public ArrayList<Tag> fetchTags( Album album ) {
+		ArrayList<Tag> tagsList = new ArrayList();
+		try {
+			PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM albumTags where albumId = ? ORDER BY name,value");
+			pstmt.setInt(1, album.getAlbumId());
+			ResultSet rs = pstmt.executeQuery();
+			while ( rs.next() ) {
+				Tag t = new Tag();
+				t.setId(album.getAlbumId());
+				t.setName(rs.getString("name"));
+				t.setValue(rs.getString("value"));
+				tagsList.add(t);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tagsList;
+	}
+	
+	public ArrayList<Tag> fetchTags( Release release ) {
+		ArrayList<Tag> tagsList = new ArrayList();
+		try {
+			PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM releaseTags where releaseId = ? ORDER BY name,value");
+			pstmt.setInt(1, release.getReleaseId());
+			ResultSet rs = pstmt.executeQuery();
+			while ( rs.next() ) {
+				Tag t = new Tag();
+				t.setId(release.getReleaseId());
+				t.setName(rs.getString("name"));
+				t.setValue(rs.getString("value"));
+				tagsList.add(t);
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tagsList;
+	}
+	
 	public void insertRelease(Release release) {
 		try {
 			PreparedStatement pstmt = connection.prepareStatement(
@@ -284,7 +352,7 @@ public class DataBase {
 	}
 	
 	private void insertTag(String table, Tag t) {
-		String query = String.format("INSERT INTO %s (id,name,value) VALUES (?,?,?)", table );
+		String query = String.format("INSERT INTO %sTags (%sId,name,value) VALUES (?,?,?)", table, table );
 		try {
 			PreparedStatement pstmt = connection.prepareStatement(query);
 			pstmt.setInt(1, t.getId());
@@ -299,11 +367,11 @@ public class DataBase {
 	}
 	
 	public void insertAlbumTag(Tag t) {
-		insertTag("albums",t);
+		insertTag("album",t);
 	}
 	
 	public void insertReleaseTag(Tag t) {
-		insertTag("releases",t);
+		insertTag("release",t);
 	}
 	
 	public void insertRelAlbumRelease(Album album, Release release) {

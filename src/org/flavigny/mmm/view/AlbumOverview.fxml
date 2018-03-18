@@ -97,8 +97,9 @@
                            <children>
                               <TableView fx:id="releaseTable" minWidth="-Infinity" prefHeight="100.0" prefWidth="450.0">
                                 <columns>
-                                  <TableColumn fx:id="releaseArtistColumn" prefWidth="167.0" text="Artist" />
-                                  <TableColumn fx:id="releaseTitleColumn" prefWidth="278.0" text="Title" />
+                                  <TableColumn fx:id="releaseArtistColumn" prefWidth="200.0" text="Artist" />
+                                  <TableColumn fx:id="releaseTitleColumn" minWidth="0.0" prefWidth="200.0" text="Title" />
+                                    <TableColumn fx:id="releaseYearColumn" prefWidth="50.0" text="Year" />
                                 </columns>
                                  <HBox.margin>
                                     <Insets />
@@ -147,7 +148,7 @@
                               </TableView>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Button fx:id="addTagButton" disable="true" mnemonicParsing="false" text="Add tag">
+                                    <Button fx:id="addTagButton" disable="true" mnemonicParsing="false" onAction="#handleAddTag" text="Add tag">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>

@@ -46,7 +46,7 @@ public class AlbumOverviewController {
 	@FXML private TableView<Release> releaseTable;
 	@FXML private TableColumn<Release, String> releaseArtistColumn;
 	@FXML private TableColumn<Release, String> releaseTitleColumn;
-	@FXML private TableColumn<Release, Integer> releaseYearColum;
+	@FXML private TableColumn<Release, Integer> releaseYearColumn;
 	
 	private ObservableList<Tag> tagList = FXCollections.observableArrayList();
 	
@@ -66,6 +66,8 @@ public class AlbumOverviewController {
 				cellData->cellData.getValue().artistProperty());
 		releaseTitleColumn.setCellValueFactory(
 				cellData->cellData.getValue().titleProperty());
+		releaseYearColumn.setCellValueFactory(
+				cellData->cellData.getValue().yearProperty().asObject());
 		
 		showAlbumDetails(null);
 		albumTable.getSelectionModel().selectedItemProperty().addListener(
@@ -130,6 +132,12 @@ public class AlbumOverviewController {
 		}
 	}
 	
+	@FXML private void handleAddTag() {
+		Album album = albumTable.getSelectionModel().getSelectedItem();
+		if ( album != null ) {
+			boolean okclicked = mainApp.showAddTagDialog(album);
+		}
+	}
 	@FXML private void handleAddRelRelease() {
 		Album album = albumTable.getSelectionModel().getSelectedItem();
 		Release release = new Release();
