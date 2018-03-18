@@ -68,6 +68,9 @@ public class AlbumOverviewController {
 				cellData->cellData.getValue().titleProperty());
 		releaseYearColumn.setCellValueFactory(
 				cellData->cellData.getValue().yearProperty().asObject());
+		tagsTable.setItems(tagList);
+		tagNameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+		tagValueColumn.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
 		
 		showAlbumDetails(null);
 		albumTable.getSelectionModel().selectedItemProperty().addListener(
@@ -92,6 +95,14 @@ public class AlbumOverviewController {
 						delRelatedReleaseButton.setDisable(true);
 					} else {
 						delRelatedReleaseButton.setDisable(false);
+					}
+				});
+		tagsTable.getSelectionModel().selectedItemProperty().addListener(
+				(observable,oldvalue,newvalue) -> {
+					if ( tagsTable.getSelectionModel().isEmpty() ) {
+						delTagButton.setDisable(true);
+					} else {
+						delTagButton.setDisable(false);
 					}
 				});
 	}
@@ -120,6 +131,8 @@ public class AlbumOverviewController {
 			commentLabel.setText(album.getComment());
 			relatedReleaseList.clear();
 			relatedReleaseList.addAll(mainApp.getDataBase().fetchReleases(album));
+			tagList.clear();
+			tagList.addAll(mainApp.getDataBase().fetchTags(album));
 		} else {
 			albumIdLabel.setText("");
 			artistLabel.setText("");
@@ -129,13 +142,15 @@ public class AlbumOverviewController {
 			secondaryTypeLabel.setText("");
 			commentLabel.setText("");
 			relatedReleaseList.clear();
+			tagList.clear();
 		}
 	}
 	
 	@FXML private void handleAddTag() {
 		Album album = albumTable.getSelectionModel().getSelectedItem();
 		if ( album != null ) {
-			boolean okclicked = mainApp.showAddTagDialog(album);
+			mainApp.showAddTagDialog(album);
+			showAlbumDetails(album);
 		}
 	}
 	@FXML private void handleAddRelRelease() {
@@ -150,8 +165,14 @@ public class AlbumOverviewController {
 		} 
 	}
 	
-	@FXML
-	private void handleDeleteAlbum() {
+	@FXML private void handleDeleteRelRelease() {
+		Album album = albumTable.getSelectionModel().getSelectedItem();
+		Release release = releaseTable.getSelectionModel().getSelectedItem();
+		mainApp.getDataBase().deleteRelAlbumRelease(album, release);
+		showAlbumDetails(album);
+	}
+	
+	@FXML private void handleDeleteAlbum() {
 		int selectedIndex = albumTable.getSelectionModel().getSelectedIndex();
 		if (selectedIndex>=0) {
 			albumTable.getItems().remove(selectedIndex);
@@ -165,8 +186,7 @@ public class AlbumOverviewController {
 		}
 	}
 	
-	@FXML
-	private void handleNewAlbum() {
+	@FXML private void handleNewAlbum() {
 		Album album = new Album();
 		boolean okClicked = mainApp.showAlbumEditDialog(album);
 		if (okClicked) {
@@ -175,22 +195,21 @@ public class AlbumOverviewController {
 		}
 	}
 	
-	@FXML
-	private void handleEditAlbum() {
-		 	Album album = albumTable.getSelectionModel().getSelectedItem();
-		 	if (album!=null) {
-		 		boolean okClicked = mainApp.showAlbumEditDialog(album);
-		 		if (okClicked) {
-		 			showAlbumDetails(album);
-		 			mainApp.getDataBase().replaceAlbum(album);
-		 		}
-		 	} else {
-		 		Alert alert = new Alert(AlertType.WARNING);
-		 		alert.initOwner(mainApp.getPrimaryStage());
-		 		alert.setTitle("No selection");
-		 		alert.setHeaderText("No album selected");
-		 		alert.setContentText("please select an album in the table.");
-		 		alert.showAndWait();
+	@FXML private void handleEditAlbum() {
+		Album album = albumTable.getSelectionModel().getSelectedItem();
+		if (album!=null) {
+			boolean okClicked = mainApp.showAlbumEditDialog(album);
+		 	if (okClicked) {
+		 		showAlbumDetails(album);
+		 		mainApp.getDataBase().replaceAlbum(album);
 		 	}
+		 } else {
+		 	Alert alert = new Alert(AlertType.WARNING);
+		 	alert.initOwner(mainApp.getPrimaryStage());
+		 	alert.setTitle("No selection");
+		 	alert.setHeaderText("No album selected");
+		 	alert.setContentText("please select an album in the table.");
+		 	alert.showAndWait();
+		 }	
 	}
 }

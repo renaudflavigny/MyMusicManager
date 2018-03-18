@@ -232,68 +232,36 @@ public class DataBase {
 		return releaseList;
 	}
 	
-	private ArrayList<Tag> fetchTags( String  objectClass) {
-		String query = "SELECT tagName,tagValue FROM tags WHERE objectClass = ? ORDER BY tagName,tagValue ASC";
-		ArrayList<Tag> tagslist = new ArrayList<>();
+	public ArrayList<String> fetchTagNames( String  objectClass ) {
+		String query = "SELECT DISTINCT tagName FROM tags WHERE objectClass = ? ORDER BY tagName ASC";
+		ArrayList<String> tagNameslist = new ArrayList<>();
 		try {
 			PreparedStatement pstmt = connection.prepareStatement(query);
 			pstmt.setString(1, objectClass);
 			ResultSet rs = pstmt.executeQuery();
 			while ( rs.next() ) {
+				tagNameslist.add(rs.getString("tagName"));
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tagNameslist;
+	}
+	
+	public ArrayList<Tag> fetchTags( ManagedObject o ) {
+		ArrayList<Tag> tagsList = new ArrayList();
+		try {
+			PreparedStatement pstmt = connection.prepareStatement("SELECT rowid,tagName,tagValue FROM tags where objectId = ? AND objectClass = ? ORDER BY tagName,tagValue");
+			pstmt.setInt(1, o.getId());
+			pstmt.setString(2, o.getClass().getName());
+			ResultSet rs = pstmt.executeQuery();
+			while ( rs.next() ) {
 				Tag t = new Tag();
-				t.setId(rs.getInt(1));
+				t.setId(rs.getInt("rowid"));
 				t.setName(rs.getString("tagName"));
 				t.setValue(rs.getString("tagValue"));
-				tagslist.add(t);
-			}
-			rs.close();
-			pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return tagslist;
-	}
-	
-	public ArrayList<Tag> fetchAlbumTags() {
-		return fetchTags(Album.class.getName());
-	}
-	
-	public ArrayList<Tag> fetchReleaseTags() {
-		return fetchTags(Release.class.getName());
-	}
-	
-	public ArrayList<Tag> fetchTags( Album album ) {
-		ArrayList<Tag> tagsList = new ArrayList();
-		try {
-			PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM albumTags where albumId = ? ORDER BY name,value");
-			pstmt.setInt(1, album.getAlbumId());
-			ResultSet rs = pstmt.executeQuery();
-			while ( rs.next() ) {
-				Tag t = new Tag();
-				t.setId(album.getAlbumId());
-				t.setName(rs.getString("name"));
-				t.setValue(rs.getString("value"));
-				tagsList.add(t);
-			}
-			rs.close();
-			pstmt.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return tagsList;
-	}
-	
-	public ArrayList<Tag> fetchTags( Release release ) {
-		ArrayList<Tag> tagsList = new ArrayList();
-		try {
-			PreparedStatement pstmt = connection.prepareStatement("SELECT * FROM releaseTags where releaseId = ? ORDER BY name,value");
-			pstmt.setInt(1, release.getReleaseId());
-			ResultSet rs = pstmt.executeQuery();
-			while ( rs.next() ) {
-				Tag t = new Tag();
-				t.setId(release.getReleaseId());
-				t.setName(rs.getString("name"));
-				t.setValue(rs.getString("value"));
 				tagsList.add(t);
 			}
 			rs.close();
@@ -351,13 +319,14 @@ public class DataBase {
 		}
 	}
 	
-	private void insertTag(String table, Tag t) {
-		String query = String.format("INSERT INTO %sTags (%sId,name,value) VALUES (?,?,?)", table, table );
+	public void insertTag(ManagedObject o, Tag t) {
+		String query = "INSERT INTO tags (objectId,objectClass,tagName,tagValue) VALUES (?,?,?,?)";
 		try {
 			PreparedStatement pstmt = connection.prepareStatement(query);
-			pstmt.setInt(1, t.getId());
-			pstmt.setString(2, t.getName());
-			pstmt.setString(3, t.getValue());
+			pstmt.setInt(1, o.getId());
+			pstmt.setString(2, o.getClass().getName());
+			pstmt.setString(3, t.getName());
+			pstmt.setString(4, t.getValue());
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -366,12 +335,16 @@ public class DataBase {
 		}
 	}
 	
-	public void insertAlbumTag(Tag t) {
-		insertTag("album",t);
-	}
-	
-	public void insertReleaseTag(Tag t) {
-		insertTag("release",t);
+	public void deleteTag(Tag t) {
+		String query = "DELETE FROM tags WHERE rowid = ?";
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(query);
+			pstmt.setInt(1, t.getId());
+			pstmt.executeUpdate();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void insertRelAlbumRelease(Album album, Release release) {
@@ -383,24 +356,32 @@ public class DataBase {
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+	}
+
+	public void deleteRelAlbumRelease(Album a, Release r) {
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(
+					"DELETE FROM relAlbumRelease WHERE albumId = ? AND releaseId = ?");
+			pstmt.setInt(1, a.getId());
+			pstmt.setInt(2, r.getId());
+			pstmt.executeUpdate();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public BooleanProperty validProperty() {
 		return this.valid;
 	}
-	
 
 	public boolean isValid() {
 		return this.validProperty().get();
 	}
-	
 
 	public void setValid(final boolean valid) {
 		this.validProperty().set(valid);
 	}
-	
 }

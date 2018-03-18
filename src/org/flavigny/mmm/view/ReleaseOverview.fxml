@@ -117,7 +117,7 @@
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button fx:id="delRelatedAlbumButton" disable="true" mnemonicParsing="false" text="Delete album">
+                                    <Button fx:id="delRelatedAlbumButton" disable="true" mnemonicParsing="false" onAction="#handleDeleterelAlbum" text="Delete album">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
@@ -139,7 +139,7 @@
                               <TableView fx:id="tagsTable" minWidth="-Infinity" prefHeight="100.0" prefWidth="450.0">
                                 <columns>
                                   <TableColumn fx:id="tagNameColumn" prefWidth="348.0" text="Name" />
-                                  <TableColumn fx:id="tagValueColum" prefWidth="100.0" text="Value" />
+                                  <TableColumn fx:id="tagValueColumn" prefWidth="100.0" text="Value" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -147,12 +147,12 @@
                               </TableView>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <Button fx:id="addTagButton" disable="true" mnemonicParsing="false" text="Add tag">
+                                    <Button fx:id="addTagButton" disable="true" mnemonicParsing="false" onAction="#handleAddTag" text="Add tag">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>
                                     </Button>
-                                    <Button fx:id="delTagButton" disable="true" mnemonicParsing="false" text="Delete tag">
+                                    <Button fx:id="delTagButton" disable="true" mnemonicParsing="false" onAction="#handleDeleteTag" text="Delete tag">
                                        <VBox.margin>
                                           <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                        </VBox.margin>

@@ -3,11 +3,10 @@
  */
 package org.flavigny.mmm.view;
 
-import javax.swing.text.html.HTML.Tag;
-
 import org.flavigny.mmm.MainApp;
 import org.flavigny.mmm.model.Album;
 import org.flavigny.mmm.model.Release;
+import org.flavigny.mmm.model.Tag;
 
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -62,7 +61,7 @@ public class ReleaseOverviewController {
 	
 	@FXML private TableView<Tag> tagsTable;
 	@FXML private TableColumn<Tag, String> tagNameColumn;
-	@FXML private TableColumn<Tag, String> tagValueColum;
+	@FXML private TableColumn<Tag, String> tagValueColumn;
 	
 	private MainApp mainApplication;
 	
@@ -76,6 +75,10 @@ public class ReleaseOverviewController {
 				cellData -> cellData.getValue().artistProperty());
 		albumTitleColumn.setCellValueFactory(
 				cellData -> cellData.getValue().titleProperty());
+		tagsTable.setItems(tagList);
+		tagNameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+		tagValueColumn.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
+		
 		showReleaseDetails(null);
 		releaseTable.getSelectionModel().selectedItemProperty().addListener(
 				(observable,oldValue,newValue)->showReleaseDetails(newValue));
@@ -101,6 +104,14 @@ public class ReleaseOverviewController {
 						delRelatedAlbumButton.setDisable(false);
 					}
 				});
+		tagsTable.getSelectionModel().selectedItemProperty().addListener(
+				(observable,oldvalue,newvalue) -> {
+					if ( tagsTable.getSelectionModel().isEmpty() ) {
+						delTagButton.setDisable(true);
+					} else {
+						delTagButton.setDisable(false);
+					}
+				});
 		
 	}
 	
@@ -116,6 +127,7 @@ public class ReleaseOverviewController {
 			commentLabel.setText(null);
 			formatLabel.setText(null);
 			relatedAlbumList.clear();
+			tagList.clear();
 		} else {
 			releaseIdLabel.setText(Integer.toString(release.getReleaseId()));
 			artistLabel.setText(release.getArtist());
@@ -128,6 +140,8 @@ public class ReleaseOverviewController {
 			formatLabel.setText(release.getFormat());
 			relatedAlbumList.clear();
 			relatedAlbumList.addAll(mainApplication.getDataBase().fetchAlbums(release));
+			tagList.clear();
+			tagList.addAll(mainApplication.getDataBase().fetchTags(release));
 		}
 	}
 
@@ -156,6 +170,13 @@ public class ReleaseOverviewController {
 		}
 	}
 	
+	@FXML private void handleDeleterelAlbum() {
+		Album album = albumsTable.getSelectionModel().getSelectedItem();
+		Release release = releaseTable.getSelectionModel().getSelectedItem();
+		mainApplication.getDataBase().deleteRelAlbumRelease(album, release);
+		showReleaseDetails(release);
+	}
+	
 	@FXML private void handleNewRelease() {
 		Release release = new Release();
 		boolean okClicked = mainApplication.showReleaseEditDialog(release);
@@ -173,6 +194,18 @@ public class ReleaseOverviewController {
 			mainApplication.getDataBase().replaceRelease(release);
 			showReleaseDetails(release);
 		}
+	}
+	
+	@FXML private void handleAddTag() {
+		Release release = releaseTable.getSelectionModel().getSelectedItem();
+		mainApplication.showAddTagDialog(release);
+		showReleaseDetails(release);
+	}
+	
+	@FXML private void handleDeleteTag() {
+		Tag t = tagsTable.getSelectionModel().getSelectedItem();
+		mainApplication.getDataBase().deleteTag(t);
+		showReleaseDetails(releaseTable.getSelectionModel().getSelectedItem());
 	}
 	
 	public ReleaseOverviewController() {

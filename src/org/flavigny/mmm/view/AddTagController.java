@@ -2,10 +2,8 @@ package org.flavigny.mmm.view;
 
 import java.util.ArrayList;
 
-import javax.print.attribute.standard.DialogTypeSelection;
-
 import org.flavigny.mmm.MainApp;
-import org.flavigny.mmm.model.Album;
+import org.flavigny.mmm.model.ManagedObject;
 import org.flavigny.mmm.model.Tag;
 
 import javafx.collections.FXCollections;
@@ -25,7 +23,7 @@ public class AddTagController {
 	
 	private MainApp mainApp;
 	private Stage dialogStage;
-	private Object albumOrRelease;
+	private ManagedObject managedObject;
 	private ObservableList<String> tagNamesList = FXCollections.observableArrayList();
 	private boolean okClicked;
 	
@@ -37,17 +35,9 @@ public class AddTagController {
 		this.dialogStage = s;
 	}
 	
-	public void setAlbumOrRelease( Object o) {
-		this.albumOrRelease = o;
-		ArrayList<Tag> tagList = new ArrayList<>();
-		if ( albumOrRelease instanceof Album ) {
-			tagList.addAll(mainApp.getDataBase().fetchAlbumTags());
-		} else {
-			tagList.addAll( mainApp.getDataBase().fetchReleaseTags());
-		}
-		for ( Tag t : tagList ) {
-			tagNamesList.add(t.getName());
-		}
+	public void setManagedObject( ManagedObject o) {
+		this.managedObject = o;
+		tagNamesList.addAll(mainApp.getDataBase().fetchTagNames(o.getClass().getName()));
 	}
 	
 	public boolean isOkClicked () {
@@ -69,14 +59,9 @@ public class AddTagController {
 	@FXML private void handleAddTag() {
 		okClicked = true;
 		Tag t = new Tag();
-		t.setId( ((Album) albumOrRelease).getAlbumId());
 		t.setName(tagNameCombo.getValue());
 		t.setValue(tagValueField.getText());
-		if ( albumOrRelease instanceof Album ) {
-			mainApp.getDataBase().insertAlbumTag(t);
-		} else {
-			mainApp.getDataBase().insertReleaseTag(t);
-		}
+		mainApp.getDataBase().insertTag(managedObject,t);
 		this.dialogStage.close();
 	}
 	

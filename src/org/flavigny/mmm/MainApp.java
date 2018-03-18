@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.flavigny.mmm.model.Album;
 import org.flavigny.mmm.model.DataBase;
+import org.flavigny.mmm.model.ManagedObject;
 import org.flavigny.mmm.model.Release;
 import org.flavigny.mmm.view.AddRelAlbumController;
 import org.flavigny.mmm.view.AddRelReleaseController;
@@ -190,7 +191,7 @@ public class MainApp extends Application {
 		}
 	}
 	
-	public boolean showAddTagDialog( Object o ) {
+	public boolean showAddTagDialog( ManagedObject o ) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/AddTagDialog.fxml"));
@@ -206,7 +207,7 @@ public class MainApp extends Application {
 			AddTagController controller = loader.getController();
 			controller.setMainApplication(this);
 			controller.setDialogStage(dialogStage);
-			controller.setAlbumOrRelease( o );
+			controller.setManagedObject(o);
 			
 			dialogStage.showAndWait();
 			return controller.isOkClicked();
