@@ -49,12 +49,13 @@
             <ComboBox fx:id="formatCombo" prefHeight="26.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
       </GridPane>
-      <ButtonBar layoutX="328.0" layoutY="346.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
+      <ButtonBar layoutX="328.0" layoutY="346.0" prefHeight="40.0" prefWidth="360.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
         <buttons>
           <Button fx:id="okButton" disable="true" mnemonicParsing="false" onAction="#handleOk" text="Ok" />
             <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
-            <Button mnemonicParsing="false" onAction="#handleMusicBrainz" text="MusicBrainz" />
+            <Button mnemonicParsing="false" onAction="#handleMusicBrainz" prefHeight="26.0" prefWidth="110.0" text="MusicBrainz" />
         </buttons>
       </ButtonBar>
+      <CheckBox fx:id="addAlbumCheckBox" layoutX="28.0" layoutY="309.0" mnemonicParsing="false" text="Add Album" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
    </children>
 </AnchorPane>

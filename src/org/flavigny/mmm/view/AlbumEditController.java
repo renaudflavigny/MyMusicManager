@@ -1,5 +1,6 @@
 package org.flavigny.mmm.view;
 
+import org.flavigny.mmm.MainApp;
 import org.flavigny.mmm.model.Album;
 
 import javafx.collections.FXCollections;
@@ -22,6 +23,7 @@ public class AlbumEditController {
 	private ObservableList<String> secondaryTypeComboData = FXCollections.observableArrayList();
 	@FXML private TextField commentField;
 	
+	private MainApp mainApplication;
 	private Stage dialogStage;
 	private Album album;
 	private Boolean okClicked = false;
@@ -46,6 +48,10 @@ public class AlbumEditController {
 		secondaryTypeCombo.setItems(secondaryTypeComboData);
 	}
 	
+	public void setMainApplication(MainApp mainApplication) {
+		this.mainApplication = mainApplication;
+	}
+
 	public void setDialogStage(Stage stage) {
 		this.dialogStage = stage;
 	}
@@ -75,6 +81,14 @@ public class AlbumEditController {
 			album.setComment(commentField.getText());
 			
 			okClicked=true;
+			
+			if (album.getId()==0) {
+				mainApplication.getDataBase().insertAlbum(album);
+				mainApplication.getAlbumList().add(album);
+			} else {
+				mainApplication.getDataBase().replaceAlbum(album);
+			}
+			
 			dialogStage.close();
 		} 
 	}

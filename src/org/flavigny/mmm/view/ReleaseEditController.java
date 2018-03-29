@@ -1,6 +1,8 @@
 package org.flavigny.mmm.view;
 
 import org.flavigny.mmm.model.Release;
+import org.flavigny.mmm.MainApp;
+import org.flavigny.mmm.model.Album;
 import org.flavigny.mmm.model.MusicBrainz;
 
 import javafx.beans.value.ChangeListener;
@@ -28,8 +30,11 @@ public class ReleaseEditController {
 	@FXML ComboBox<String> formatCombo;
 	private ObservableList<String> formatComboData = FXCollections.observableArrayList();
 	@FXML private TextField commentField;
+	
+	@FXML private CheckBox addAlbumCheckBox; 
 	@FXML private Button okButton;
 	
+	private MainApp mainApplication;
 	private Stage dialogStage;
 	private Release release;
 	private Boolean okClicked = false;
@@ -60,6 +65,7 @@ public class ReleaseEditController {
 		packagingComboData.add("Cardboard / Paper sleeve");
 		packagingComboData.add("Cassette case");
 		packagingComboData.add("Digibook");
+		packagingComboData.add("Digipak");
 		packagingComboData.add("Discbox slider");
 		packagingComboData.add("Fatbox");
 		packagingComboData.add("Gatefold cover");
@@ -90,6 +96,10 @@ public class ReleaseEditController {
 		return okClicked;
 	}
 	
+	public void setMainApplication(MainApp mainApplication) {
+		this.mainApplication = mainApplication;
+	}
+
 	public void setDialogStage(Stage dialogStage) {
 		this.dialogStage = dialogStage;
 	}
@@ -133,7 +143,7 @@ public class ReleaseEditController {
 		dialogStage.close();
 	}
 	
-	@FXML private void handleOk() {
+	private void applyChanges() {
 		release.setArtist(artistField.getText());
 		release.setTitle(titleField.getText());
 		release.setYear(Integer.valueOf(yearField.getText()));
@@ -143,13 +153,38 @@ public class ReleaseEditController {
 		release.setFormat(formatCombo.getValue());
 		release.setComment(commentField.getText());
 		
+		if ( release.getId()==0 ) {
+			mainApplication.getDataBase().insertRelease(release);
+			mainApplication.getReleaseList().add(release);
+		} else {
+			mainApplication.getDataBase().replaceRelease(release);
+		}
+	}
+	
+	@FXML private void handleOk() {
+		applyChanges();
 		okClicked = true;
+		if ( !addAlbumCheckBox.isDisable() ) {
+			Album album = new Album();
+			album.setArtist(release.getArtist());
+			album.setTitle(release.getTitle());
+			album.setYear(release.getYear());
+			if (mainApplication.showAlbumEditDialog(album, dialogStage)) {
+				mainApplication.getDataBase().insertRelAlbumRelease(album, release);
+			}
+		}
 		dialogStage.close();
 	}
 	
 	@FXML private void handleMusicBrainz() {
 		MusicBrainz mb = new MusicBrainz();
-		mb.addField("barcode", "724382962625");
-		mb.search();
+		mb.addField("barcode", barcodeField.getText());
+		mb.search(release);
+		artistField.setText(release.getArtist());
+		titleField.setText(release.getTitle());
+		yearField.setText(String.valueOf(release.getYear()));
+		statusCombo.setValue(release.getStatus());
+		packagingCombo.setValue(release.getPackaging());
+		formatCombo.setValue(release.getFormat());
 	}
 }

@@ -188,10 +188,8 @@ public class AlbumOverviewController {
 	
 	@FXML private void handleNewAlbum() {
 		Album album = new Album();
-		boolean okClicked = mainApp.showAlbumEditDialog(album);
-		if (okClicked) {
-			mainApp.getDataBase().insertAlbum(album);
-			mainApp.getAlbumList().add(album);
+		if ( mainApp.showAlbumEditDialog(album) ) {
+			showAlbumDetails(album);
 		}
 	}
 	
@@ -201,14 +199,13 @@ public class AlbumOverviewController {
 			boolean okClicked = mainApp.showAlbumEditDialog(album);
 		 	if (okClicked) {
 		 		showAlbumDetails(album);
-		 		mainApp.getDataBase().replaceAlbum(album);
 		 	}
 		 } else {
 		 	Alert alert = new Alert(AlertType.WARNING);
 		 	alert.initOwner(mainApp.getPrimaryStage());
 		 	alert.setTitle("No selection");
 		 	alert.setHeaderText("No album selected");
-		 	alert.setContentText("please select an album in the table.");
+		 	alert.setContentText("Please select an album in the table.");
 		 	alert.showAndWait();
 		 }	
 	}

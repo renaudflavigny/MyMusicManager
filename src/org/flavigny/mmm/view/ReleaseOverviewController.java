@@ -181,8 +181,6 @@ public class ReleaseOverviewController {
 		Release release = new Release();
 		boolean okClicked = mainApplication.showReleaseEditDialog(release);
 		if ( okClicked ) {
-			mainApplication.getDataBase().insertRelease(release);
-			mainApplication.getReleaseList().add(release);
 			showReleaseDetails(release);
 		}
 	}
@@ -191,7 +189,6 @@ public class ReleaseOverviewController {
 		Release release = releaseTable.getSelectionModel().getSelectedItem();
 		boolean okClicked = mainApplication.showReleaseEditDialog(release);
 		if ( okClicked ) {
-			mainApplication.getDataBase().replaceRelease(release);
 			showReleaseDetails(release);
 		}
 	}

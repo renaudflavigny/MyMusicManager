@@ -108,23 +108,28 @@ public class MainApp extends Application {
 	}
 	
 	public boolean showAlbumEditDialog(Album album) {
+		return showAlbumEditDialog(album, primaryStage);
+	}
+	
+	public boolean showAlbumEditDialog(Album album, Stage stage) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/AlbumEditDialog.fxml"));
 			AnchorPane albumEdit = (AnchorPane)loader.load();
 			
 			Stage dialogStage = new Stage();
-			if ( album.getAlbumId() == null) {
+			if ( album.getAlbumId() == 0 ) {
 				dialogStage.setTitle("New album");
 			} else {
 				dialogStage.setTitle("Edit album");
 			}
 			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.initOwner(primaryStage);
+			dialogStage.initOwner(stage);
 			Scene scene = new Scene(albumEdit);
 			dialogStage.setScene(scene);
 			
 			AlbumEditController controller = loader.getController();
+			controller.setMainApplication(this);
 			controller.setDialogStage(dialogStage);
 			controller.setAlbum(album);
 			
@@ -235,6 +240,7 @@ public class MainApp extends Application {
 			dialogStage.setScene(scene);
 			
 			ReleaseEditController controller = loader.getController();
+			controller.setMainApplication(this);
 			controller.setDialogStage(dialogStage);
 			controller.setRelease(release);
 			
