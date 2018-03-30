@@ -35,20 +35,21 @@
             <Label text="Year" GridPane.rowIndex="3" />
             <Label text="Barcode" GridPane.rowIndex="4" />
             <Label text="Status" GridPane.rowIndex="5" />
-            <ComboBox fx:id="statusCombo" prefHeight="26.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label text="Packaging" GridPane.rowIndex="6" />
-            <ComboBox fx:id="packagingCombo" prefHeight="26.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label text="Comment" GridPane.rowIndex="8" />
+            <Label text="Format" GridPane.rowIndex="7" />
             <TextField fx:id="artistField" GridPane.columnIndex="1" />
+            <CheckBox fx:id="variousCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxOnAction" text="Various artists" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="titleField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="yearField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="barcodeField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="commentField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <CheckBox fx:id="variousCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxOnAction" text="Various artists" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Format" GridPane.rowIndex="7" />
+            <ComboBox fx:id="statusCombo" prefHeight="26.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="packagingCombo" prefHeight="26.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <ComboBox fx:id="formatCombo" prefHeight="26.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="commentField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          </children>
       </GridPane>
+      <CheckBox fx:id="addAlbumCheckBox" layoutX="28.0" layoutY="309.0" mnemonicParsing="false" text="Add Album" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
       <ButtonBar layoutX="328.0" layoutY="346.0" prefHeight="40.0" prefWidth="360.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
         <buttons>
           <Button fx:id="okButton" disable="true" mnemonicParsing="false" onAction="#handleOk" text="Ok" />
@@ -56,6 +57,5 @@
             <Button mnemonicParsing="false" onAction="#handleMusicBrainz" prefHeight="26.0" prefWidth="110.0" text="MusicBrainz" />
         </buttons>
       </ButtonBar>
-      <CheckBox fx:id="addAlbumCheckBox" layoutX="28.0" layoutY="309.0" mnemonicParsing="false" text="Add Album" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
    </children>
 </AnchorPane>

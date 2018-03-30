@@ -164,7 +164,7 @@ public class ReleaseEditController {
 	@FXML private void handleOk() {
 		applyChanges();
 		okClicked = true;
-		if ( !addAlbumCheckBox.isDisable() ) {
+		if ( addAlbumCheckBox.isSelected() ) {
 			Album album = new Album();
 			album.setArtist(release.getArtist());
 			album.setTitle(release.getTitle());

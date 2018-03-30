@@ -55,6 +55,10 @@ public class AddTagController {
 				});
 		tagNameCombo.setItems(tagNamesList);
 	}
+	
+	@FXML private void handleOnAction() {
+		handleAddTag();
+	}
 
 	@FXML private void handleAddTag() {
 		okClicked = true;
