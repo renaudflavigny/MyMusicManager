@@ -66,6 +66,7 @@ public class MusicBrainz {
 		ressource = "release/";
 		URLConnection connection;
 		InputStream response;
+		Double count = 0.;
 		try {
 			connection = new URL(baseURL+ressource+query+"&fmt=xml").openConnection();
 			connection.setRequestProperty("Accept-Charset", charset);
@@ -77,7 +78,7 @@ public class MusicBrainz {
 			
 			XPathFactory xPathFactory = XPathFactory.newInstance();
 			XPath xPath = xPathFactory.newXPath();
-			Double count = (Double)xPath.evaluate("/metadata/release-list/attribute::count", rootElement, XPathConstants.NUMBER);
+			count = (Double)xPath.evaluate("/metadata/release-list/attribute::count", rootElement, XPathConstants.NUMBER);
 			if ( count > 0 ) {
 				Node title = (Node)xPath.evaluate("//release/title", rootElement, XPathConstants.NODE);
 				if ( title != null ) {
@@ -116,6 +117,6 @@ public class MusicBrainz {
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
-		return 0;
+		return count.intValue();
 	}
 }

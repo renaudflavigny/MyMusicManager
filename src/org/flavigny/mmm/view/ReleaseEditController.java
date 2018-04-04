@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ReleaseEditController {
@@ -33,6 +34,7 @@ public class ReleaseEditController {
 	
 	@FXML private CheckBox addAlbumCheckBox; 
 	@FXML private Button okButton;
+	@FXML private Button musicbrainzButton;
 	
 	private MainApp mainApplication;
 	private Stage dialogStage;
@@ -179,12 +181,16 @@ public class ReleaseEditController {
 	@FXML private void handleMusicBrainz() {
 		MusicBrainz mb = new MusicBrainz();
 		mb.addField("barcode", barcodeField.getText());
-		mb.search(release);
-		artistField.setText(release.getArtist());
-		titleField.setText(release.getTitle());
-		yearField.setText(String.valueOf(release.getYear()));
-		statusCombo.setValue(release.getStatus());
-		packagingCombo.setValue(release.getPackaging());
-		formatCombo.setValue(release.getFormat());
+		if ( mb.search(release) != 0 ) {
+			artistField.setText(release.getArtist());
+			titleField.setText(release.getTitle());
+			yearField.setText(String.valueOf(release.getYear()));
+			statusCombo.setValue(release.getStatus());
+			packagingCombo.setValue(release.getPackaging());
+			formatCombo.setValue(release.getFormat());
+			musicbrainzButton.setTextFill(Color.GREEN);
+		} else {
+			musicbrainzButton.setTextFill(Color.RED);
+		};
 	}
 }

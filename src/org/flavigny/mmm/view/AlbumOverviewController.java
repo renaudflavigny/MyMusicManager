@@ -153,6 +153,13 @@ public class AlbumOverviewController {
 			showAlbumDetails(album);
 		}
 	}
+	
+	@FXML private void handleDeleteTag() {
+		Tag t = tagsTable.getSelectionModel().getSelectedItem();
+		mainApp.getDataBase().deleteTag(t);
+		showAlbumDetails(albumTable.getSelectionModel().getSelectedItem());
+	}
+	
 	@FXML private void handleAddRelRelease() {
 		Album album = albumTable.getSelectionModel().getSelectedItem();
 		Release release = new Release();
