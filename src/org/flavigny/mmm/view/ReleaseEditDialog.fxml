@@ -42,7 +42,7 @@
             <CheckBox fx:id="variousCheckbox" mnemonicParsing="false" onAction="#handleCheckBoxOnAction" text="Various artists" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="titleField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="yearField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="barcodeField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="barcodeField" onAction="#handleMusicBrainz" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <ComboBox fx:id="statusCombo" prefHeight="26.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ComboBox fx:id="packagingCombo" prefHeight="26.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <ComboBox fx:id="formatCombo" prefHeight="26.0" prefWidth="456.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
