@@ -2,7 +2,6 @@ package org.flavigny.mmm.view;
 
 import org.flavigny.mmm.MainApp;
 import org.flavigny.mmm.model.Album;
-import org.flavigny.mmm.model.DataBase;
 import org.flavigny.mmm.model.Release;
 import org.flavigny.mmm.model.Tag;
 
@@ -181,8 +180,10 @@ public class AlbumOverviewController {
 	
 	@FXML private void handleDeleteAlbum() {
 		int selectedIndex = albumTable.getSelectionModel().getSelectedIndex();
+		Album album = albumTable.getSelectionModel().getSelectedItem();
 		if (selectedIndex>=0) {
 			albumTable.getItems().remove(selectedIndex);
+			mainApp.getDataBase().deleteAlbum(album);
 		} else {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.initOwner(mainApp.getPrimaryStage());

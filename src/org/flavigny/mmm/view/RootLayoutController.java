@@ -1,10 +1,8 @@
 package org.flavigny.mmm.view;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import org.flavigny.mmm.MainApp;
-import org.flavigny.mmm.model.Album;
 import org.flavigny.mmm.model.DataBase;
 import org.flavigny.mmm.model.DataBaseException;
 

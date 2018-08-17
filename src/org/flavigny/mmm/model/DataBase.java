@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Observable;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -161,6 +160,18 @@ public class DataBase {
 		}
 	}
 	
+	public void deleteAlbum(Album a) {
+		String query = "DELETE FROM albums WHERE albumId = ?";
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(query);
+			pstmt.setInt(1, a.getId());
+			pstmt.executeUpdate();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void replaceAlbum( Album album ) {
 		try {
 			PreparedStatement pstmt = connection.prepareStatement(
@@ -297,6 +308,19 @@ public class DataBase {
 			e.printStackTrace();
 		}
 	}
+	
+	public void deleteRelease(Release r) {
+		String query = "DELETE FROM releases WHERE releaseId = ?";
+		try {
+			PreparedStatement pstmt = connection.prepareStatement(query);
+			pstmt.setInt(1, r.getId());
+			pstmt.executeUpdate();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	public void replaceRelease( Release release ) {
 		try {

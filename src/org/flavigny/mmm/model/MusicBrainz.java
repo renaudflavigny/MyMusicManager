@@ -28,12 +28,7 @@ public class MusicBrainz {
 	private String charset = StandardCharsets.UTF_8.name();
 	private String ressource;
 	private String query;
-	private Integer limit = 25;
-	private Integer offset = 0;
-
 	private HashMap<String, String> fields = new HashMap<>(20);
-	private String responseString;
-	
 	public void addField(String k, String v) {
 		fields.put(k,v);
 	}
@@ -56,7 +51,6 @@ public class MusicBrainz {
 			try {
 				query += String.format("%s:%sAND", URLEncoder.encode(k,charset), URLEncoder.encode(fields.get(k),charset));
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

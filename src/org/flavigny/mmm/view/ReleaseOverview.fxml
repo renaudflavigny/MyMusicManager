@@ -88,7 +88,7 @@
                           <buttons>
                             <Button fx:id="newButton" disable="true" mnemonicParsing="false" onAction="#handleNewRelease" text="New..." />
                               <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#handleEditRelease" text="Edit..." />
-                              <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" text="Delete" />
+                              <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#handleDeleteRelease" text="Delete" />
                           </buttons>
                         </ButtonBar>
                         <Label text="Related albums">

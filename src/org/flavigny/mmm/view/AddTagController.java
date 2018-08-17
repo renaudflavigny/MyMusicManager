@@ -1,6 +1,5 @@
 package org.flavigny.mmm.view;
 
-import java.util.ArrayList;
 
 import org.flavigny.mmm.MainApp;
 import org.flavigny.mmm.model.ManagedObject;
